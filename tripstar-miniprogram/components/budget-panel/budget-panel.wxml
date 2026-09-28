@@ -1,0 +1,76 @@
+<view class="budget-panel" wx:if="{{plan && plan.budget}}">
+  <!-- 汇总面板 -->
+  <view class="budget-summary">
+    <view class="summary-title">{{titleText}}</view>
+    <view class="summary-total-wrap">
+      <text class="summary-currency">¥</text>
+      <text class="summary-total-value">{{summary.totalText}}</text>
+    </view>
+    <view class="summary-sub-grid">
+      <view class="sub-item">
+        <view class="sub-value">¥{{summary.attractionText}}</view>
+        <view class="sub-label">{{attractionText}}</view>
+      </view>
+      <view class="sub-item">
+        <view class="sub-value">¥{{summary.hotelText}}</view>
+        <view class="sub-label">{{hotelText}}</view>
+      </view>
+      <view class="sub-item">
+        <view class="sub-value">¥{{summary.mealText}}</view>
+        <view class="sub-label">{{mealText}}</view>
+      </view>
+      <view class="sub-item">
+        <view class="sub-value">¥{{summary.transportText}}</view>
+        <view class="sub-label">{{transportText}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 筛选 + 排序 -->
+  <view class="budget-toolbar">
+    <view class="toolbar-item">
+      <text class="toolbar-label">{{filterLabel}}</text>
+      <picker range="{{filterOptions}}" range-key="label" value="{{filterIndex}}" bindchange="onFilterChange">
+        <view class="toolbar-picker">{{filterOptions[filterIndex].label}}</view>
+      </picker>
+    </view>
+    <view class="toolbar-item">
+      <text class="toolbar-label">{{sortLabel}}</text>
+      <picker range="{{sortOptions}}" range-key="label" value="{{sortIndex}}" bindchange="onSortChange">
+        <view class="toolbar-picker">{{sortOptions[sortIndex].label}}</view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 明细列表 -->
+  <view class="budget-detail" wx:if="{{filteredItems.length>0}}">
+    <view class="detail-header">
+      <text class="col-type">{{typeHeader}}</text>
+      <text class="col-day">{{dayHeader}}</text>
+      <text class="col-name">{{nameHeader}}</text>
+      <text class="col-amount">{{amountHeader}}</text>
+    </view>
+    <view wx:for="{{filteredItems}}" wx:key="id" class="detail-row">
+      <text class="col-type detail-type">{{item.typeLabel}}</text>
+      <text class="col-day">{{item.dayNumberText}}</text>
+      <text class="col-name">{{item.name}}</text>
+      <text class="col-amount detail-amount">¥{{item.amountText}}</text>
+      <view class="col-action">
+        <text class="action-btn" data-item="{{item}}" catchtap="deleteBudgetItem">{{deleteText}}</text>
+      </view>
+    </view>
+  </view>
+  <view wx:else class="empty-state">
+    <view class="empty-icon">📋</view>
+    <text>{{noDetailsText}}</text>
+  </view>
+
+  <!-- 待复原项 -->
+  <view class="budget-pending" wx:if="{{pendingItems.length>0}}">
+    <view class="pending-title">{{pendingTitle}}</view>
+    <view wx:for="{{pendingItems}}" wx:key="uid" class="pending-item">
+      <text class="pending-name">{{item.name}}</text>
+      <text class="restore-btn" data-index="{{index}}" catchtap="restoreBudgetItem">{{restoreText}}</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,88 @@
+<view class="day-panel">
+  <view wx:for="{{days}}" wx:key="day_index" wx:for-item="day" class="day-item" wx:if="{{days}}">
+    <!-- 折叠头 -->
+    <view class="day-header {{day.open?'active':''}}" data-index="{{index}}" bindtap="toggleDay">
+      <view class="day-title-wrap">
+        <text class="day-title">{{day.dayNumberText}}</text>
+        <text wx:if="{{day.city}}" class="day-city-tag">{{day.city}}</text>
+        <text wx:if="{{day.is_transfer_day}}" class="day-transfer-tag">{{transferDayText}}</text>
+      </view>
+      <view class="day-date">{{day.date}}</view>
+      <view class="day-arrow {{day.open?'open':''}}">▾</view>
+    </view>
+
+    <!-- 折叠内容 -->
+    <view wx:if="{{day.open}}" class="day-body">
+      <!-- 城际移动信息 -->
+      <view wx:if="{{day.is_transfer_day && day.transfer_info}}" class="transfer-info-banner">
+        <text class="transfer-info-icon">🚄</text>
+        <text class="transfer-info-label">{{transferInfoText}}:</text>
+        <text class="transfer-info-text">{{day.transfer_info}}</text>
+      </view>
+
+      <!-- 基本信息 -->
+      <view class="day-info">
+        <view class="info-row" wx:if="{{day.description}}">
+          <text class="label">{{descLabel}}</text>
+          <text class="value">{{day.description}}</text>
+        </view>
+        <view class="info-row" wx:if="{{day.transportation}}">
+          <text class="label">{{transportLabel}}</text>
+          <text class="value">{{day.transportation}}</text>
+        </view>
+        <view class="info-row" wx:if="{{day.accommodation}}">
+          <text class="label">{{accommodationLabel}}</text>
+          <text class="value">{{day.accommodation}}</text>
+        </view>
+      </view>
+
+      <!-- 景点安排 -->
+      <view class="sub-title">{{attractionTitleText}}</view>
+      <view class="attraction-list">
+        <view wx:for="{{day.attractions}}" wx:for-item="attr" wx:for-index="attrIndex" wx:key="name" class="attraction-card">
+          <view class="attr-image-wrap">
+            <image class="attr-image" src="{{attr.image}}" mode="aspectFill" lazy-load binderror="onImageError"></image>
+            <view class="attr-badge"><text class="attr-num">{{attrIndex+1}}</text></view>
+            <view wx:if="{{attr.ticket_price}}" class="attr-price">¥{{attr.ticket_price}}</view>
+          </view>
+          <view class="attr-info">
+            <view class="attr-name">{{attr.name}}</view>
+            <view class="attr-line"><text class="attr-label">{{addressLabel}}:</text>{{attr.address}}</view>
+            <view class="attr-line"><text class="attr-label">{{durationLabel}}:</text>{{attr.visit_duration}}{{minuteUnitText}}</view>
+            <view wx:if="{{attr.rating}}" class="attr-line"><text class="attr-label">{{ratingLabel}}:</text>{{attr.rating}}</view>
+            <view wx:if="{{attr.description}}" class="attr-desc">{{attr.description}}</view>
+            <view wx:if="{{attr.reservation_required}}" class="reservation-alert">
+              <text class="reservation-badge">📋 {{reservationRequiredText}}</text>
+              <text wx:if="{{attr.reservation_tips}}" class="reservation-tips">{{attr.reservation_tips}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 酒店推荐 -->
+      <block wx:if="{{day.hotel}}">
+        <view class="sub-title">{{hotelTitleText}}</view>
+        <view class="hotel-card">
+          <view class="hotel-name">{{day.hotel.name}}</view>
+          <view class="hotel-row"><text class="hotel-label">{{typeLabel}}:</text>{{day.hotel.type}}</view>
+          <view class="hotel-row"><text class="hotel-label">{{priceRangeLabel}}:</text>{{day.hotel.price_range}}</view>
+          <view class="hotel-row"><text class="hotel-label">{{ratingLabel}}:</text>{{day.hotel.rating}}</view>
+          <view class="hotel-row"><text class="hotel-label">{{distanceLabel}}:</text>{{day.hotel.distance}}</view>
+          <view class="hotel-row" wx:if="{{day.hotel.address}}"><text class="hotel-label">{{addressLabel}}:</text>{{day.hotel.address}}</view>
+        </view>
+      </block>
+
+      <!-- 餐饮安排 -->
+      <block wx:if="{{day.meals && day.meals.length>0}}">
+        <view class="sub-title">{{mealsTitleText}}</view>
+        <view class="meal-list">
+          <view wx:for="{{day.meals}}" wx:for-item="meal" wx:key="type" class="meal-item">
+            <text class="meal-type">{{meal.label}}</text>
+            <text class="meal-name">{{meal.name}}</text>
+            <text wx:if="{{meal.estimated_cost}}" class="meal-cost">¥{{meal.estimated_cost}}</text>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+</view>

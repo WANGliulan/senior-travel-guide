@@ -1,0 +1,62 @@
+<view class="weather-panel" wx:if="{{list.length>0}}">
+  <!-- 左侧主卡片 -->
+  <view class="weather-hero" style="background: {{gradient}}">
+    <view class="hero-top">
+      <view class="hero-weekday">{{current.weekday}}</view>
+      <view class="hero-date">{{current.dateText}}</view>
+      <view class="hero-location">📍 {{city || current.city}}</view>
+    </view>
+    <view class="hero-weather">
+      <view class="weather-icon {{current.icon}}">
+        <text class="icon-symbol">{{iconSymbol}}</text>
+      </view>
+      <view class="hero-temp">{{current.tempText}}</view>
+      <view class="hero-desc">{{current.day_weather}}</view>
+    </view>
+  </view>
+
+  <!-- 右侧日列表 -->
+  <view class="weather-week">
+    <scroll-view scroll-x class="week-scroll">
+      <view class="week-list">
+        <view
+          wx:for="{{list}}"
+          wx:key="date"
+          class="week-item {{activeIndex===index?'active':''}}"
+          data-index="{{index}}"
+          bindtap="selectDay"
+        >
+          <view class="week-icon {{item.icon}}">
+            <text class="icon-symbol-small">{{item.smallSymbol}}</text>
+          </view>
+          <view class="week-name">{{item.weekdayShort}}</view>
+          <view class="week-temp">{{item.tempText}}</view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 详情 -->
+  <view class="weather-detail glass-card">
+    <view class="detail-item">
+      <text class="detail-label">{{dayLabel}}</text>
+      <text class="detail-value">{{current.day_weather}} · {{current.tempText}}</text>
+    </view>
+    <view class="detail-item">
+      <text class="detail-label">{{nightLabel}}</text>
+      <text class="detail-value">{{current.night_weather}} · {{current.nightTempText}}</text>
+    </view>
+    <view class="detail-item">
+      <text class="detail-label">{{precipLabel}}</text>
+      <text class="detail-value">{{current.precipitation}}</text>
+    </view>
+    <view class="detail-item">
+      <text class="detail-label">{{humidityLabel}}</text>
+      <text class="detail-value">{{current.humidity}}</text>
+    </view>
+    <view class="detail-item">
+      <text class="detail-label">{{windLabel}}</text>
+      <text class="detail-value">{{current.wind}}</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,77 @@
+<view class="page {{highContrast ? 'high-contrast' : ''}}" style="font-size: {{fontScale}}px;">
+  <view class="page-head">填写老人出行信息（点选即可，无需打字）</view>
+
+  <!-- 目的地 -->
+  <view class="form-group">
+    <view class="form-label">1. 去哪里？</view>
+    <picker mode="selector" range="{{allCities}}" bindchange="onCityChange">
+      <view class="picker-value {{city ? '' : 'placeholder'}}">{{city || '请选择城市'}}</view>
+    </picker>
+  </view>
+
+  <!-- 天数与预算 -->
+  <view class="form-group">
+    <view class="form-label">2. 玩几天？</view>
+    <picker mode="selector" range="{{dayOptions}}" bindchange="onDaysChange">
+      <view class="picker-value">{{days}} 天</view>
+    </picker>
+  </view>
+  <view class="form-group">
+    <view class="form-label">3. 预算档次</view>
+    <view class="option-row">
+      <view class="option-item {{budget === item ? 'active' : ''}}" wx:for="{{budgetOptions}}" wx:key="*this" data-value="{{item}}" bindtap="onBudget">{{item}}</view>
+    </view>
+  </view>
+
+  <!-- 兴趣偏好 -->
+  <view class="form-group">
+    <view class="form-label">4. 喜欢什么？（可多选）</view>
+    <view class="option-row">
+      <view class="option-item {{interests.indexOf(item) >= 0 ? 'active' : ''}}" wx:for="{{interestOptions}}" wx:key="*this" data-value="{{item}}" bindtap="toggleInterest">{{item}}</view>
+    </view>
+    <view class="selected-summary {{interestsText.indexOf('未选择') >= 0 ? 'empty' : ''}}" wx:if="{{interestsText}}">{{interestsText}}</view>
+  </view>
+
+  <!-- 身体情况 -->
+  <view class="form-group">
+    <view class="form-label">5. 行动能力</view>
+    <view class="option-row">
+      <view class="option-item {{mobility === item ? 'active' : ''}}" wx:for="{{mobilityOptions}}" wx:key="*this" data-value="{{item}}" bindtap="onMobility">{{item}}</view>
+    </view>
+  </view>
+  <view class="form-group">
+    <view class="form-label">6. 慢性病情况（可多选）</view>
+    <view class="option-row">
+      <view class="option-item {{chronic.indexOf(item) >= 0 ? 'active' : ''}}" wx:for="{{chronicOptions}}" wx:key="*this" data-value="{{item}}" bindtap="toggleChronic">{{item}}</view>
+    </view>
+    <view class="selected-summary {{chronicText.indexOf('未选择') >= 0 ? 'empty' : ''}}" wx:if="{{chronicText}}">{{chronicText}}</view>
+  </view>
+  <view class="form-group">
+    <view class="form-label">7. 腿脚关节状况</view>
+    <view class="option-row">
+      <view class="option-item {{joints === item ? 'active' : ''}}" wx:for="{{jointsOptions}}" wx:key="*this" data-value="{{item}}" bindtap="onJoints">{{item}}</view>
+    </view>
+  </view>
+  <view class="form-group">
+    <view class="form-label">8. 是否需要无障碍设施</view>
+    <switch checked="{{accessible}}" color="#5DAF8C" bindchange="onAccessible" />
+    <view class="tip">{{accessible ? '需要（将自动过滤无无障碍配套的景点）' : '不需要'}}</view>
+  </view>
+  <view class="form-group">
+    <view class="form-label">9. 单日可承受最大步行距离</view>
+    <view class="option-row">
+      <view class="option-item {{walkLimit === item ? 'active' : ''}}" wx:for="{{walkOptions}}" wx:key="*this" data-value="{{item}}" bindtap="onWalk">{{item}}</view>
+    </view>
+  </view>
+
+  <!-- 填表人 -->
+  <view class="form-group">
+    <view class="form-label">10. 谁在填写？</view>
+    <view class="option-row">
+      <view class="option-item {{fillBy === item ? 'active' : ''}}" wx:for="{{fillOptions}}" wx:key="*this" data-value="{{item}}" bindtap="onFillBy">{{item}}</view>
+    </view>
+  </view>
+
+  <view class="big-btn" bindtap="submit">生成我的专属行程</view>
+  <view class="tip center-tip">规则引擎会先过滤高体力景点，再生成慢节奏低负荷行程</view>
+</view>

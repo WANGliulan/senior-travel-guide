@@ -1,0 +1,29 @@
+<view class="page {{highContrast ? 'high-contrast' : ''}}" style="font-size: {{fontScale}}px;">
+  <!-- 约束提示条 -->
+  <view class="constraint-bar" wx:if="{{constraintText}}">{{constraintText}}</view>
+
+  <!-- 消息列表 -->
+  <scroll-view scroll-y class="msg-list" scroll-into-view="{{scrollTo}}">
+    <view class="msg {{m.role === 'user' ? 'msg-user' : 'msg-ai'}}" wx:for="{{messages}}" wx:key="id" id="msg-{{m.id}}">
+      <view class="msg-bubble">
+        <block wx:if="{{m.typing}}">正在思考…</block>
+        <block wx:else>{{m.content}}</block>
+      </view>
+    </view>
+    <view id="bottom" style="height: 4rpx;"></view>
+  </scroll-view>
+
+  <!-- 快捷指令 -->
+  <view class="quick-row">
+    <view class="quick-chip" wx:for="{{quickChips}}" wx:key="*this" data-text="{{item}}" bindtap="onQuick">{{item}}</view>
+  </view>
+
+  <!-- 输入区 -->
+  <view class="input-bar">
+    <input class="input" value="{{input}}" bindinput="onInput" confirm-type="send" bindconfirm="send" placeholder="说点什么，比如：增加休息" />
+    <view class="send-btn {{sending ? 'disabled' : ''}}" bindtap="send">{{sending ? '…' : '发送'}}</view>
+  </view>
+
+  <view class="tip center-tip" wx:if="{{plan}}">行程已按约束实时调整 · 可返回查看</view>
+  <view class="big-btn secondary" wx:if="{{plan}}" bindtap="viewPlan">返回查看最新行程</view>
+</view>

@@ -1,0 +1,30 @@
+<view class="history-container">
+  <view class="history-header">
+    <text class="history-title">{{T.home.history.title}}</text>
+  </view>
+
+  <view wx:if="{{loading}}" class="empty-state">
+    <view class="empty-icon">⏳</view>
+    <text>{{T.common.loading}}</text>
+  </view>
+
+  <view wx:elif="{{items.length===0}}" class="empty-state">
+    <view class="empty-icon">🗂️</view>
+    <text>{{T.home.history.empty}}</text>
+    <button class="btn-ghost empty-create-btn" bindtap="goCreate">{{T.result.backCreateTrip}}</button>
+  </view>
+
+  <view wx:else class="history-list">
+    <view wx:for="{{items}}" wx:key="plan_id" class="history-item glass-card" data-plan="{{item.plan_id}}" bindtap="openHistory">
+      <view class="item-top">
+        <text class="item-city">{{item.city}}</text>
+        <text class="item-days">{{item.travel_days}}{{T.home.travelDaysUnit}}</text>
+      </view>
+      <view class="item-dates">
+        <text>{{item.start_date}} → {{item.end_date}}</text>
+      </view>
+      <view wx:if="{{item.overall_suggestions}}" class="item-suggestion">{{item.overall_suggestions}}</view>
+      <view wx:if="{{item.updated_at}}" class="item-updated">{{T.home.history.updatedAt}}: {{item.updated_at}}</view>
+    </view>
+  </view>
+</view>

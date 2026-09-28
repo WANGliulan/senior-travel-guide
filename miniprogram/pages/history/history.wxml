@@ -1,0 +1,16 @@
+<view class="page {{highContrast ? 'high-contrast' : ''}}" style="font-size: {{fontScale}}px;">
+  <view class="page-head">我的方案（历史行程）</view>
+
+  <block wx:if="{{loading}}"><view class="empty">加载中…</view></block>
+  <block wx:elif="{{list.length === 0}}">
+    <view class="empty">还没有保存的方案</view>
+    <view class="tip center-tip">在行程结果页点击「保存方案」即可保存在这里</view>
+  </block>
+
+  <view class="card plan-item" wx:for="{{list}}" wx:key="id" data-id="{{item.id}}" bindtap="view">
+    <view class="plan-title">{{item.title || (item.city + ' · ' + item.days + '日游')}}</view>
+    <view class="plan-meta">{{item.city}} · {{item.days}}天 · 风险：{{item.risk || '低'}}</view>
+    <view class="plan-time">{{item.createdAtText}}</view>
+    <view class="del-btn" data-id="{{item.id}}" catchtap="del">删除</view>
+  </view>
+</view>

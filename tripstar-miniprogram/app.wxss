@@ -1,0 +1,229 @@
+/* app.wxss —— 旅途星辰全局暗黑玻璃拟物主题 */
+
+page {
+  background: linear-gradient(160deg, #0a0a0f 0%, #12101f 30%, #1a1530 60%, #0f0d1a 100%);
+  color: rgba(255, 255, 255, 0.9);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 28rpx;
+  line-height: 1.5;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+view,
+text,
+input,
+textarea,
+button,
+scroll-view {
+  box-sizing: border-box;
+}
+
+/* ===== 玻璃拟态卡片 ===== */
+.glass-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24rpx;
+  padding: 36rpx;
+  box-shadow: 0 24rpx 80rpx rgba(0, 0, 0, 0.4);
+  position: relative;
+}
+
+/* ===== 通用文字 ===== */
+.text-muted {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.text-accent {
+  color: #ffd699;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #ffb347 0%, #ff6b6b 50%, #c084fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ===== 通用按钮 ===== */
+.btn-primary {
+  width: 100%;
+  height: 100rpx;
+  line-height: 100rpx;
+  border-radius: 28rpx;
+  border: none;
+  color: #fff;
+  font-size: 34rpx;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-align: center;
+  background: linear-gradient(135deg, #ffb347 0%, #ff6b6b 50%, #c084fc 100%);
+  box-shadow: 0 16rpx 48rpx rgba(255, 107, 107, 0.3);
+}
+
+.btn-primary.btn-loading {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.6);
+  box-shadow: none;
+}
+
+.btn-ghost {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16rpx;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 26rpx;
+  padding: 12rpx 28rpx;
+  line-height: 1.4;
+}
+
+.btn-ghost::after {
+  border: none;
+}
+
+/* ===== 步骤指示器 ===== */
+.step-indicator {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 28rpx;
+}
+
+.step-num {
+  font-size: 22rpx;
+  font-weight: 700;
+  color: #ffb347;
+  background: rgba(255, 179, 71, 0.12);
+  width: 52rpx;
+  height: 52rpx;
+  border-radius: 14rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.step-label {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.02em;
+}
+
+.step-line {
+  flex: 1;
+  height: 2rpx;
+  background: linear-gradient(90deg, rgba(255, 179, 71, 0.3) 0%, transparent 100%);
+}
+
+/* ===== 暗色输入框 ===== */
+.field-label {
+  display: block;
+  font-size: 24rpx;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.04em;
+  margin-bottom: 14rpx;
+}
+
+.dark-input {
+  width: 100%;
+  height: 88rpx;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20rpx;
+  color: rgba(255, 255, 255, 0.9);
+  padding: 0 28rpx;
+  font-size: 28rpx;
+  transition: all 0.3s ease;
+}
+
+.dark-input-focused {
+  border-color: #ffb347;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dark-textarea {
+  width: 100%;
+  min-height: 160rpx;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20rpx;
+  color: rgba(255, 255, 255, 0.9);
+  padding: 20rpx 28rpx;
+  font-size: 28rpx;
+}
+
+.placeholder-style {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+/* ===== 分区标题 ===== */
+.section-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 32rpx 0 20rpx;
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+}
+
+.section-title .divider {
+  flex: 1;
+  height: 2rpx;
+  background: linear-gradient(90deg, rgba(255, 179, 71, 0.3), transparent);
+}
+
+/* ===== 空状态 ===== */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 40rpx;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 28rpx;
+}
+
+.empty-state .empty-icon {
+  font-size: 80rpx;
+  margin-bottom: 24rpx;
+  opacity: 0.6;
+}
+
+/* ===== 通用标签 ===== */
+.tag {
+  display: inline-block;
+  padding: 6rpx 18rpx;
+  border-radius: 10rpx;
+  font-size: 22rpx;
+  background: rgba(255, 179, 71, 0.1);
+  border: 1px solid rgba(255, 179, 71, 0.2);
+  color: #ffd699;
+  margin-right: 12rpx;
+}
+
+.tag-danger {
+  background: rgba(255, 107, 107, 0.12);
+  border-color: rgba(255, 107, 107, 0.25);
+  color: #ff8a8a;
+}
+
+/* ===== 骨架屏占位 ===== */
+.skeleton {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 12rpx;
+}
+
+/* 去掉 button 默认边框 */
+button::after {
+  border: none;
+}
+
+/* 星星闪烁动画 */
+@keyframes twinkle {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 0.8; }
+}

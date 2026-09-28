@@ -1,0 +1,17 @@
+<view class="page {{highContrast ? 'high-contrast' : ''}}" style="font-size: {{fontScale}}px;">
+  <view class="title">正在为您生成行程…</view>
+  <view class="sub">请稍候，正在根据身体情况定制慢节奏行程</view>
+
+  <view class="steps">
+    <view class="step {{item.done ? 'done' : ''}}" wx:for="{{steps}}" wx:key="text">
+      <view class="step-dot">{{item.done ? '✓' : '○'}}</view>
+      <view class="step-text">{{item.text}}</view>
+    </view>
+  </view>
+
+  <view wx:if="{{error}}" class="error-box">
+    <view class="error-text">{{error}}</view>
+    <view class="big-btn" bindtap="retry">重新生成</view>
+    <view class="big-btn secondary" bindtap="back">返回修改</view>
+  </view>
+</view>

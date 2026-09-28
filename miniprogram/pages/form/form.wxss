@@ -1,0 +1,28 @@
+.page { padding-bottom: 60rpx; }
+.page-head { font-size: 1.15em; font-weight: 700; color: #2E6B4F; margin: 32rpx 32rpx 8rpx; }
+.form-label { font-size: 1.05em; font-weight: 700; color: #2E6B4F; margin-bottom: 18rpx; }
+.picker-value {
+  padding: 18rpx 24rpx;
+  background: #EDF5F0;
+  border-radius: 16rpx;
+  font-size: 1em;
+}
+.picker-value.placeholder { color: #9AA5B1; }
+.center-tip { text-align: center; margin: 8rpx 32rpx 40rpx; }
+
+/* 选择结果回显 */
+.selected-summary {
+  margin-top: 16rpx;
+  padding: 14rpx 20rpx;
+  background: #E9F4EE;
+  border: 2rpx solid #CFE0D4;
+  border-radius: 12rpx;
+  font-size: 0.9em;
+  color: #2E6B4F;
+  line-height: 1.5;
+}
+.selected-summary.empty {
+  background: #F4FAF6;
+  color: #9BA89F;
+  border-color: #E3EFE8;
+}

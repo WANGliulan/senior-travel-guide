@@ -1,0 +1,109 @@
+/* app.wxss - 全局样式（适老化：淡绿色主题、大字体、大按钮、简约） */
+page {
+  background: #F4FAF6;
+  color: #33413B;
+  font-size: 34rpx;
+  line-height: 1.6;
+}
+
+/* 通用卡片（简约：去阴影） */
+.card {
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin: 16rpx 24rpx;
+  border: 2rpx solid #E3EFE8;
+}
+
+.card-title {
+  font-size: 38rpx;
+  font-weight: 700;
+  color: #2E6B4F;
+  margin-bottom: 16rpx;
+}
+
+/* 大按钮（适老） */
+.big-btn {
+  background: #5DAF8C;
+  color: #FFFFFF;
+  font-size: 38rpx;
+  font-weight: 700;
+  border-radius: 20rpx;
+  padding: 28rpx 0;
+  text-align: center;
+  margin: 24rpx;
+  border: none;
+}
+.big-btn:active {
+  opacity: 0.88;
+}
+.big-btn.secondary {
+  background: #FFFFFF;
+  color: #2E6B4F;
+  border: 2rpx solid #9ED3B7;
+}
+.big-btn.warn {
+  background: #E8A23D;
+}
+
+/* 标签 */
+.tag {
+  display: inline-block;
+  font-size: 24rpx;
+  color: #2E6B4F;
+  background: #E9F4EE;
+  border-radius: 10rpx;
+  padding: 4rpx 14rpx;
+  margin-right: 12rpx;
+}
+.tag.level-low { background: #E4F3EB; color: #2E7D5A; }
+.tag.level-mid { background: #FDF3E0; color: #B07A1D; }
+.tag.level-high { background: #FDE8E8; color: #B05C5C; }
+
+/* 提示文字 */
+.tip {
+  font-size: 26rpx;
+  color: #7C8B83;
+}
+
+/* 空态 */
+.empty {
+  text-align: center;
+  padding: 120rpx 40rpx;
+  color: #9BA89F;
+  font-size: 30rpx;
+}
+
+/* 表单分组 */
+.form-group {
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 28rpx 30rpx;
+  margin: 16rpx 24rpx;
+  border: 2rpx solid #E3EFE8;
+}
+.form-label {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #2E6B4F;
+  margin-bottom: 18rpx;
+}
+.option-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+.option-item {
+  padding: 16rpx 30rpx;
+  border: 2rpx solid #CFE0D4;
+  border-radius: 14rpx;
+  font-size: 32rpx;
+  color: #33413B;
+  background: #FFFFFF;
+}
+.option-item.active {
+  border-color: #5DAF8C;
+  background: #E9F4EE;
+  color: #2E6B4F;
+  font-weight: 700;
+}

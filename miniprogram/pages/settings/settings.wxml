@@ -1,0 +1,51 @@
+<view class="page {{highContrast ? 'high-contrast' : ''}}" style="font-size: {{fontScale * 15}}px;">
+  <!-- 适老化显示设置 -->
+  <view class="card">
+    <view class="card-title">显示设置（适老化）</view>
+    <view class="set-row">
+      <view class="set-label">字体大小</view>
+      <view class="set-value">{{fontScaleText}}%</view>
+    </view>
+    <slider min="80" max="180" value="{{fontScaleText}}" step="5" activeColor="#5DAF8C" block-size="28" bindchange="onFontScale" />
+    <view class="set-row">
+      <view class="set-label">高对比度模式</view>
+      <switch checked="{{highContrast}}" color="#5DAF8C" bindchange="onContrast" />
+    </view>
+    <view class="tip">高对比度适合视力较弱的长辈，文字更清晰</view>
+  </view>
+
+  <!-- 云环境状态 -->
+  <view class="card">
+    <view class="card-title">运行状态</view>
+    <view class="set-row">
+      <view class="set-label">云环境</view>
+      <view class="set-value">{{cloudReady ? '已连接' : '本地模拟模式'}}</view>
+    </view>
+    <view class="set-row" wx:if="{{openid}}">
+      <view class="set-label">微信标识</view>
+      <view class="set-value">{{openid}}</view>
+    </view>
+    <view class="tip">{{cloudReady ? '' : '未配置云环境 ID 时使用内置模拟数据，可正常体验全部页面；上线前请在 config.js 填入云环境 ID。'}}</view>
+  </view>
+
+  <!-- 数据 -->
+  <view class="card">
+    <view class="card-title">数据管理</view>
+    <view class="set-row" bindtap="clearHistory">
+      <view class="set-label danger">清空历史方案</view>
+      <view class="set-value">›</view>
+    </view>
+  </view>
+
+  <!-- 关于 -->
+  <view class="card">
+    <view class="card-title">关于</view>
+    <view class="tip">
+      智游康行 · 岁旅相伴 v{{version}}
+    </view>
+    <view class="tip">
+      面向老年人的旅游规划智能体小程序：规则引擎前置过滤高体力景点，再生成慢节奏、低负荷的适老行程，附带行程风险评估与老年出行贴士。
+    </view>
+    <view class="tip">健康提醒：本应用建议仅供参考，出行前请根据老人身体状况咨询医生；身体不适请及时就近就医。</view>
+  </view>
+</view>

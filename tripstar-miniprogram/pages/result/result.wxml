@@ -1,0 +1,112 @@
+<view class="result-container" wx:if="{{tripPlan}}">
+  <!-- 顶部分区切换 -->
+  <view class="top-switch-nav">
+    <scroll-view scroll-x class="switch-scroll">
+      <view class="switch-menu">
+        <view wx:for="{{navItems}}" wx:key="key"
+          class="switch-item {{activeSection===item.key?'active':''}}"
+          data-key="{{item.key}}" bindtap="switchSection">
+          {{item.label}}
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <scroll-view scroll-y class="result-body" scroll-into-view="{{scrollTarget}}" bindscroll="onBodyScroll">
+    <!-- ===== 概览 ===== -->
+    <view wx:if="{{activeSection==='overview'}}" class="section-body" id="overview">
+      <view wx:if="{{overviewAttractions.length>0}}" class="overview-list">
+        <view wx:for="{{overviewAttractions}}" wx:key="uid" class="overview-card glass-card">
+          <view class="overview-image-wrap">
+            <image
+              class="overview-image"
+              src="{{item.image}}"
+              mode="aspectFill"
+              lazy-load
+              binderror="onImageError"
+            ></image>
+            <view class="overview-badge">
+              <text class="badge-number">{{item.dayNumber}}-{{item.order+1}}</text>
+            </view>
+            <view wx:if="{{item.ticket_price}}" class="overview-price">¥{{item.ticket_price}}</view>
+          </view>
+          <view class="overview-info">
+            <view class="overview-name">{{item.name}}</view>
+            <view class="overview-address">{{item.address}}</view>
+            <view class="overview-duration">{{T.result.fieldVisitDuration}}: {{item.visit_duration}}{{T.result.minuteUnit}}</view>
+            <view wx:if="{{item.description}}" class="overview-desc">{{item.description}}</view>
+            <view class="overview-day-tag" bindtap="goToDayFromOverview" data-day="{{item.dayArrayIndex}}">
+              {{item.dayNumberText}}
+            </view>
+          </view>
+        </view>
+      </view>
+      <view wx:else class="empty-state">
+        <view class="empty-icon">🕊️</view>
+        <text>{{T.common.noData}}</text>
+      </view>
+      <view class="overview-meta">
+        <text class="overview-date">{{dateRangeText}}</text>
+        <text wx:if="{{planId}}" class="overview-planid">Plan ID: {{planId}}</text>
+      </view>
+      <view wx:if="{{tripPlan.overall_suggestions}}" class="overview-suggestion">
+        {{T.result.suggestionLabel}} {{tripPlan.overall_suggestions}}
+      </view>
+    </view>
+
+    <!-- ===== 预算 ===== -->
+    <view wx:if="{{activeSection==='budget' && tripPlan.budget}}" class="section-body" id="budget">
+      <budget-panel plan="{{tripPlan}}" bind:planchange="onBudgetPlanChange" />
+    </view>
+
+    <!-- ===== 地图 ===== -->
+    <view wx:if="{{activeSection==='map'}}" class="section-body" id="map">
+      <view class="map-toolbar">
+        <button class="btn-ghost" bindtap="refreshMap">{{T.result.refreshMap}}</button>
+      </view>
+      <map
+        class="trip-map"
+        latitude="{{mapCenter.latitude}}"
+        longitude="{{mapCenter.longitude}}"
+        scale="12"
+        markers="{{mapMarkers}}"
+        polyline="{{mapPolylines}}"
+        show-location
+        enable-zoom
+        enable-scroll
+      ></map>
+      <view wx:if="{{mapMarkers.length===0}}" class="map-empty">
+        <text>{{T.result.noTripPlanDesc}}</text>
+      </view>
+    </view>
+
+    <!-- ===== 每日行程 ===== -->
+    <view wx:if="{{activeSection==='days'}}" class="section-body" id="days">
+      <day-panel id="dayPanel" plan="{{tripPlan}}" />
+    </view>
+
+    <!-- ===== 知识图谱 ===== -->
+    <view wx:if="{{activeSection==='knowledge-graph'}}" class="section-body" id="knowledge-graph">
+      <knowledge-graph graph="{{graphData}}" />
+    </view>
+
+    <!-- ===== 天气 ===== -->
+    <view wx:if="{{activeSection==='weather' && tripPlan.weather_info && tripPlan.weather_info.length>0}}" class="section-body" id="weather">
+      <weather-panel weather="{{tripPlan.weather_info}}" city="{{tripPlan.city}}" />
+    </view>
+  </scroll-view>
+
+  <!-- AI 问答悬浮窗 -->
+  <chat-panel plan="{{tripPlan}}" />
+
+  <!-- 返回顶部 -->
+  <view class="back-top" bindtap="scrollTop" wx:if="{{showBackTop}}">↑</view>
+</view>
+
+<view wx:else class="empty-state-panel">
+  <view class="empty-state">
+    <view class="empty-icon">🧭</view>
+    <view class="empty-desc">{{T.result.noTripPlanDesc}}</view>
+    <button class="btn-ghost empty-back-btn" bindtap="goBack">{{T.result.backCreateTrip}}</button>
+  </view>
+</view>

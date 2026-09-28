@@ -1,0 +1,15 @@
+.page { padding: 80rpx 40rpx; }
+.title { text-align: center; font-size: 1.5em; font-weight: 800; color: #2E6B4F; }
+.sub { text-align: center; color: #6B7280; margin: 16rpx 0 48rpx; }
+.steps { margin: 0 24rpx; }
+.step {
+  display: flex; align-items: center;
+  padding: 22rpx 24rpx; margin-bottom: 16rpx;
+  background: #FFFFFF; border-radius: 16rpx;
+  color: #9AA5B1;
+}
+.step.done { color: #2E6B4F; background: #E9F4EE; }
+.step-dot { width: 44rpx; height: 44rpx; border-radius: 50%; border: 3rpx solid currentColor; text-align: center; line-height: 38rpx; margin-right: 18rpx; font-size: 0.9em; }
+.step-text { font-size: 1em; }
+.error-box { margin-top: 48rpx; }
+.error-text { text-align: center; color: #B91C1C; margin-bottom: 24rpx; }

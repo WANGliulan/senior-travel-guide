@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "行程方案",
+  "usingComponents": {
+    "day-panel": "/components/day-panel/day-panel",
+    "budget-panel": "/components/budget-panel/budget-panel",
+    "weather-panel": "/components/weather-panel/weather-panel",
+    "knowledge-graph": "/components/knowledge-graph/knowledge-graph",
+    "chat-panel": "/components/chat-panel/chat-panel"
+  }
+}

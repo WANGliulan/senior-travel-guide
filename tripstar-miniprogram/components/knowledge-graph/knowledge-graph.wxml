@@ -1,0 +1,10 @@
+<view class="kg-panel">
+  <view class="kg-title">{{titleText}}</view>
+  <canvas type="2d" id="kgCanvas" class="kg-canvas"></canvas>
+  <view class="kg-legend" wx:if="{{legend.length>0}}">
+    <view wx:for="{{legend}}" wx:key="name" class="kg-legend-item">
+      <view class="kg-legend-dot" style="background: {{item.color}}"></view>
+      <text class="kg-legend-name">{{item.label}}</text>
+    </view>
+  </view>
+</view>

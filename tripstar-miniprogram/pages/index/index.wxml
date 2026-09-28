@@ -1,0 +1,167 @@
+<view class="home-container">
+  <!-- 语言切换 -->
+  <view class="lang-bar">
+    <view class="lang-options">
+      <view class="lang-option {{locale==='zh-CN'?'active':''}}" bindtap="switchLocale" data-locale="zh-CN">{{T.app.language.zh}}</view>
+      <view class="lang-option {{locale==='ja-JP'?'active':''}}" bindtap="switchLocale" data-locale="ja-JP">{{T.app.language.ja}}</view>
+      <view class="lang-option {{locale==='en-US'?'active':''}}" bindtap="switchLocale" data-locale="en-US">{{T.app.language.en}}</view>
+    </view>
+  </view>
+
+  <!-- Hero 区域 -->
+  <view class="hero-section">
+    <view class="hero-badge">{{T.home.heroBadge}}</view>
+    <view class="hero-title">
+      <text class="title-line">{{T.home.titleLine}}</text>
+    </view>
+    <view class="hero-desc">{{T.home.heroDesc}}</view>
+  </view>
+
+  <!-- 表单主体 -->
+  <view class="glass-card">
+    <!-- Step 1: 目的地与行程 -->
+    <view class="step-section">
+      <view class="step-indicator">
+        <text class="step-num">01</text>
+        <text class="step-label">{{T.home.step1}}</text>
+        <view class="step-line"></view>
+      </view>
+
+      <view class="field-item">
+        <text class="field-label">{{T.home.cityLabel}}</text>
+        <input
+          class="dark-input {{cityFocus?'dark-input-focused':''}}"
+          placeholder="{{T.home.cityPlaceholder}}"
+          placeholder-class="placeholder-style"
+          value="{{formData.city}}"
+          bindinput="onCityInput"
+          bindfocus="onCityFocus"
+          bindblur="onCityBlur"
+        />
+      </view>
+
+      <view class="fields-2">
+        <view class="field-item">
+          <text class="field-label">{{T.home.startDateLabel}}</text>
+          <picker mode="date" value="{{formData.start_date}}" bindchange="onStartDateChange">
+            <view class="dark-input picker-value {{formData.start_date?'':'picker-placeholder'}}">
+              {{formData.start_date || T.home.startDatePlaceholder}}
+            </view>
+          </picker>
+        </view>
+        <view class="field-item">
+          <text class="field-label">{{T.home.endDateLabel}}</text>
+          <picker mode="date" value="{{formData.end_date}}" start="{{formData.start_date}}" bindchange="onEndDateChange">
+            <view class="dark-input picker-value {{formData.end_date?'':'picker-placeholder'}}">
+              {{formData.end_date || T.home.endDatePlaceholder}}
+            </view>
+          </picker>
+        </view>
+      </view>
+
+      <view class="days-chip">
+        <text class="days-number">{{formData.travel_days}}</text>
+        <text class="days-text">{{T.home.travelDaysUnit}}</text>
+      </view>
+    </view>
+
+    <!-- Step 2: 偏好设置 -->
+    <view class="step-section">
+      <view class="step-indicator">
+        <text class="step-num">02</text>
+        <text class="step-label">{{T.home.step2}}</text>
+        <view class="step-line"></view>
+      </view>
+
+      <view class="fields-2">
+        <view class="field-item">
+          <text class="field-label">{{T.home.transportationLabel}}</text>
+          <picker range="{{transportOptions}}" range-key="label" value="{{transportIndex}}" bindchange="onTransportChange">
+            <view class="dark-input picker-value">{{transportOptions[transportIndex].label}}</view>
+          </picker>
+        </view>
+        <view class="field-item">
+          <text class="field-label">{{T.home.accommodationLabel}}</text>
+          <picker range="{{accommodationOptions}}" range-key="label" value="{{accommodationIndex}}" bindchange="onAccommodationChange">
+            <view class="dark-input picker-value">{{accommodationOptions[accommodationIndex].label}}</view>
+          </picker>
+        </view>
+      </view>
+
+      <view class="field-item">
+        <text class="field-label">{{T.home.interestsLabel}}</text>
+        <view class="interest-grid">
+          <view
+            wx:for="{{interestOptions}}"
+            wx:key="value"
+            class="interest-card {{item.active?'active':''}}"
+            data-value="{{item.value}}"
+            bindtap="togglePreference"
+          >
+            <text class="interest-name">{{item.label}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Step 3: 特殊需求 -->
+    <view class="step-section">
+      <view class="step-indicator">
+        <text class="step-num">03</text>
+        <text class="step-label">{{T.home.step3}}</text>
+        <view class="step-line"></view>
+      </view>
+      <textarea
+        class="dark-textarea"
+        placeholder="{{T.home.specialNeedsPlaceholder}}"
+        placeholder-class="placeholder-style"
+        value="{{formData.free_text_input}}"
+        bindinput="onFreeTextInput"
+        maxlength="-1"
+      ></textarea>
+    </view>
+
+    <!-- 提交按钮 -->
+    <button class="btn-primary {{loading?'btn-loading':''}}" bindtap="handleSubmit" disabled="{{loading}}">
+      <block wx:if="{{!loading}}">{{T.home.submit}}</block>
+      <block wx:else>{{T.home.submitting}}</block>
+    </button>
+
+    <!-- 加载进度 -->
+    <view wx:if="{{loading}}" class="progress-section">
+      <view class="progress-track">
+        <view class="progress-fill" style="width: {{loadingProgress}}%"></view>
+      </view>
+      <view class="progress-text">{{loadingStatus}}</view>
+    </view>
+  </view>
+
+  <!-- 历史计划 -->
+  <view class="history-section">
+    <view class="section-title">
+      <text>{{T.home.history.eyebrow}}</text>
+      <view class="divider"></view>
+      <text class="text-accent refresh-btn" bindtap="loadHistory">{{T.home.history.refresh}}</text>
+    </view>
+    <view wx:if="{{historyItems.length===0}}" class="empty-state">
+      <view class="empty-icon">🗂️</view>
+      <text>{{T.home.history.empty}}</text>
+    </view>
+    <view wx:else class="history-list">
+      <view
+        wx:for="{{historyItems}}"
+        wx:key="plan_id"
+        class="history-item glass-card"
+        data-plan="{{item.plan_id}}"
+        bindtap="openHistory"
+      >
+        <view class="history-city">{{item.city}}</view>
+        <view class="history-meta">
+          <text>{{item.start_date}} → {{item.end_date}}</text>
+          <text class="history-days">{{item.travel_days}}{{T.home.travelDaysUnit}}</text>
+        </view>
+        <view wx:if="{{item.overall_suggestions}}" class="history-suggestion">{{item.overall_suggestions}}</view>
+      </view>
+    </view>
+  </view>
+</view>

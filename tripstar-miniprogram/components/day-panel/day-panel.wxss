@@ -1,0 +1,305 @@
+/* components/day-panel/day-panel.wxss */
+.day-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.day-item {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20rpx;
+  overflow: hidden;
+}
+
+.day-header {
+  display: flex;
+  align-items: center;
+  padding: 28rpx 28rpx;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.day-header.active {
+  border-bottom: 1px solid rgba(255, 179, 71, 0.15);
+}
+
+.day-title-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  min-width: 0;
+}
+
+.day-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.day-city-tag {
+  padding: 4rpx 16rpx;
+  border-radius: 30rpx;
+  background: rgba(90, 141, 249, 0.15);
+  border: 1px solid rgba(90, 141, 249, 0.3);
+  color: #9cb9ff;
+  font-size: 22rpx;
+}
+
+.day-transfer-tag {
+  padding: 4rpx 16rpx;
+  border-radius: 30rpx;
+  background: rgba(255, 152, 0, 0.15);
+  border: 1px solid rgba(255, 152, 0, 0.3);
+  color: #ffb347;
+  font-size: 22rpx;
+}
+
+.day-date {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.4);
+  margin-right: 16rpx;
+}
+
+.day-arrow {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 28rpx;
+  transition: transform 0.3s;
+}
+
+.day-arrow.open {
+  transform: rotate(180deg);
+  color: #ffd699;
+}
+
+.day-body {
+  padding: 28rpx;
+}
+
+.transfer-info-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12rpx;
+  padding: 20rpx;
+  background: rgba(255, 152, 0, 0.08);
+  border: 1px solid rgba(255, 152, 0, 0.2);
+  border-radius: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.transfer-info-label {
+  color: #ffb347;
+  font-size: 26rpx;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.transfer-info-text {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 26rpx;
+  line-height: 1.6;
+}
+
+.day-info {
+  display: flex;
+  flex-direction: column;
+  gap: 14rpx;
+  margin-bottom: 8rpx;
+}
+
+.info-row {
+  display: flex;
+  gap: 12rpx;
+  font-size: 26rpx;
+}
+
+.info-row .label {
+  color: rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
+}
+
+.info-row .value {
+  color: rgba(255, 255, 255, 0.8);
+  flex: 1;
+}
+
+.sub-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #ffd699;
+  margin: 32rpx 0 20rpx;
+  padding-left: 16rpx;
+  border-left: 6rpx solid rgba(255, 179, 71, 0.6);
+}
+
+.attraction-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.attraction-card {
+  display: flex;
+  gap: 20rpx;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16rpx;
+  padding: 20rpx;
+}
+
+.attr-image-wrap {
+  position: relative;
+  width: 180rpx;
+  height: 180rpx;
+  flex-shrink: 0;
+}
+
+.attr-image {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 14rpx;
+  background: #1a262f;
+}
+
+.attr-badge {
+  position: absolute;
+  top: 8rpx;
+  left: 8rpx;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 10rpx;
+  padding: 2rpx 12rpx;
+}
+
+.attr-num {
+  color: #ffd699;
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.attr-price {
+  position: absolute;
+  top: 8rpx;
+  right: 8rpx;
+  background: rgba(255, 87, 34, 0.85);
+  color: #fff;
+  font-size: 22rpx;
+  font-weight: 700;
+  padding: 2rpx 12rpx;
+  border-radius: 10rpx;
+}
+
+.attr-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.attr-name {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.92);
+  margin-bottom: 8rpx;
+}
+
+.attr-line {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: 4rpx;
+}
+
+.attr-label {
+  color: rgba(255, 255, 255, 0.4);
+  margin-right: 6rpx;
+}
+
+.attr-desc {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 6rpx;
+  line-height: 1.5;
+}
+
+.reservation-alert {
+  margin-top: 12rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+  padding: 14rpx;
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.25);
+  border-radius: 12rpx;
+}
+
+.reservation-badge {
+  color: #ff8a8a;
+  font-size: 24rpx;
+  font-weight: 600;
+}
+
+.reservation-tips {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 22rpx;
+  line-height: 1.5;
+}
+
+.hotel-card {
+  background: rgba(255, 179, 71, 0.05);
+  border: 1px solid rgba(255, 179, 71, 0.15);
+  border-radius: 16rpx;
+  padding: 20rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.hotel-name {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #ffd699;
+  margin-bottom: 4rpx;
+}
+
+.hotel-row {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.hotel-label {
+  color: rgba(255, 255, 255, 0.4);
+  margin-right: 6rpx;
+}
+
+.meal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.meal-item {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 14rpx 20rpx;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12rpx;
+}
+
+.meal-type {
+  flex-shrink: 0;
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+  background: rgba(232, 104, 74, 0.15);
+  color: #ff9a7a;
+  font-size: 22rpx;
+}
+
+.meal-name {
+  flex: 1;
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.meal-cost {
+  color: #ffd699;
+  font-size: 24rpx;
+  font-weight: 600;
+}

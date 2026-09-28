@@ -1,0 +1,174 @@
+/* components/budget-panel/budget-panel.wxss */
+.budget-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+/* 汇总 */
+.budget-summary {
+  background: rgba(255, 179, 71, 0.05);
+  border: 1px solid rgba(255, 179, 71, 0.15);
+  border-radius: 24rpx;
+  padding: 32rpx;
+}
+
+.summary-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #ffd699;
+  margin-bottom: 20rpx;
+}
+
+.summary-total-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 8rpx;
+  margin-bottom: 28rpx;
+}
+
+.summary-currency {
+  font-size: 36rpx;
+  color: #ffb347;
+  font-weight: 700;
+}
+
+.summary-total-value {
+  font-size: 72rpx;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+.summary-sub-grid {
+  display: flex;
+  gap: 16rpx;
+}
+
+.sub-item {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 16rpx;
+  padding: 16rpx;
+  text-align: center;
+}
+
+.sub-value {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.sub-label {
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 6rpx;
+}
+
+/* 工具栏 */
+.budget-toolbar {
+  display: flex;
+  gap: 16rpx;
+}
+
+.toolbar-item {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16rpx;
+  padding: 16rpx 20rpx;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.toolbar-label {
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.45);
+  flex-shrink: 0;
+}
+
+.toolbar-picker {
+  flex: 1;
+  font-size: 24rpx;
+  color: #ffd699;
+  text-align: right;
+}
+
+/* 明细 */
+.budget-detail {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20rpx;
+  overflow: hidden;
+}
+
+.detail-header,
+.detail-row {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 16rpx 16rpx;
+}
+
+.detail-header {
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.detail-row {
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  font-size: 24rpx;
+}
+
+.col-type { width: 110rpx; flex-shrink: 0; }
+.col-day { width: 90rpx; flex-shrink: 0; }
+.col-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.col-amount { width: 100rpx; text-align: right; flex-shrink: 0; }
+.col-action { width: 70rpx; text-align: right; flex-shrink: 0; }
+
+.detail-type { color: rgba(255, 255, 255, 0.65); }
+.detail-amount { color: #ffd699; font-weight: 700; }
+
+.action-btn {
+  color: #ff8a8a;
+  font-size: 22rpx;
+  padding: 4rpx 8rpx;
+}
+
+/* 待复原 */
+.budget-pending {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  border-radius: 20rpx;
+  padding: 20rpx;
+}
+
+.pending-title {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 12rpx;
+}
+
+.pending-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12rpx 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.pending-name {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.restore-btn {
+  color: #ffb347;
+  font-size: 24rpx;
+  padding: 4rpx 12rpx;
+  background: rgba(255, 179, 71, 0.1);
+  border-radius: 12rpx;
+}

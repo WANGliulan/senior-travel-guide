@@ -1,0 +1,124 @@
+<view class="settings-container">
+  <view class="settings-title">{{T.settings.title}}</view>
+
+  <view class="glass-card settings-form">
+    <view class="field-item">
+      <text class="field-label">{{T.settings.labels.apiBaseUrl}}</text>
+      <input
+        class="dark-input"
+        placeholder="{{T.settings.placeholders.apiBaseUrl}}"
+        placeholder-class="placeholder-style"
+        value="{{formData.api_base_url}}"
+        data-key="api_base_url"
+        bindinput="onInput"
+      />
+    </view>
+
+    <view class="section-divider"></view>
+
+    <view class="field-item">
+      <text class="field-label">{{T.settings.labels.amapJsKey}}</text>
+      <input
+        class="dark-input"
+        placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        placeholder-class="placeholder-style"
+        value="{{formData.amap_js_key}}"
+        data-key="amap_js_key"
+        bindinput="onInput"
+      />
+    </view>
+
+    <view class="field-item">
+      <text class="field-label">{{T.settings.labels.amapWebKey}}</text>
+      <input
+        class="dark-input"
+        placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        placeholder-class="placeholder-style"
+        value="{{formData.amap_web_key}}"
+        data-key="amap_web_key"
+        bindinput="onInput"
+      />
+    </view>
+
+    <view class="field-item">
+      <text class="field-label">{{T.settings.labels.googleMapsApiKey}}</text>
+      <input
+        class="dark-input"
+        placeholder="{{T.settings.placeholders.googleMapsApiKey}}"
+        placeholder-class="placeholder-style"
+        value="{{formData.google_maps_api_key}}"
+        data-key="google_maps_api_key"
+        bindinput="onInput"
+      />
+    </view>
+
+    <view class="field-item">
+      <text class="field-label">{{T.settings.labels.googleMapsProxy}}</text>
+      <input
+        class="dark-input"
+        placeholder="{{T.settings.placeholders.googleMapsProxy}}"
+        placeholder-class="placeholder-style"
+        value="{{formData.google_maps_proxy}}"
+        data-key="google_maps_proxy"
+        bindinput="onInput"
+      />
+    </view>
+
+    <view class="section-divider"></view>
+
+    <view class="field-item">
+      <text class="field-label">{{T.settings.labels.openaiBaseUrl}}</text>
+      <input
+        class="dark-input"
+        placeholder="{{T.settings.placeholders.openaiBaseUrl}}"
+        placeholder-class="placeholder-style"
+        value="{{formData.openai_base_url}}"
+        data-key="openai_base_url"
+        bindinput="onInput"
+      />
+    </view>
+
+    <view class="field-item">
+      <text class="field-label">{{T.settings.labels.openaiModel}}</text>
+      <input
+        class="dark-input"
+        placeholder="{{T.settings.placeholders.openaiModel}}"
+        placeholder-class="placeholder-style"
+        value="{{formData.openai_model}}"
+        data-key="openai_model"
+        bindinput="onInput"
+      />
+    </view>
+
+    <view class="field-item">
+      <text class="field-label">{{T.settings.labels.openaiApiKey}}</text>
+      <input
+        class="dark-input"
+        password
+        placeholder="sk-..."
+        placeholder-class="placeholder-style"
+        value="{{formData.openai_api_key}}"
+        data-key="openai_api_key"
+        bindinput="onInput"
+      />
+    </view>
+
+    <view class="field-item">
+      <text class="field-label">{{T.settings.labels.xhsCookie}}</text>
+      <textarea
+        class="dark-textarea"
+        placeholder="{{T.settings.placeholders.xhsCookie}}"
+        placeholder-class="placeholder-style"
+        value="{{formData.xhs_cookie}}"
+        data-key="xhs_cookie"
+        bindinput="onInput"
+      ></textarea>
+    </view>
+
+    <button class="btn-primary" bindtap="saveSettings">{{T.settings.saveApply}}</button>
+  </view>
+
+  <view class="settings-tip">
+    <text>{{T.settings.messages.saved}}</text>
+  </view>
+</view>

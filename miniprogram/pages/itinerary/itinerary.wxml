@@ -1,0 +1,84 @@
+<view class="page {{highContrast ? 'high-contrast' : ''}}" style="font-size: {{fontScale}}px;">
+  <block wx:if="{{loading}}"><view class="empty">加载中…</view></block>
+  <block wx:elif="{{!plan}}"><view class="empty">暂无行程数据</view></block>
+
+  <block wx:else>
+    <!-- 总览 -->
+    <view class="overview">
+      <view class="ov-title">{{plan.title}}</view>
+      <view class="ov-meta">目的地：{{plan.city}}　|　{{plan.days}} 天</view>
+      <view class="ov-risk">行程风险评估：<text class="risk-{{plan.risk.level === '高' ? 'high' : (plan.risk.level === '中' ? 'mid' : 'low')}}">{{plan.risk.level}}</text>　每日步行 {{plan.risk.dailyWalk}}</view>
+    </view>
+
+    <!-- 分天行程 -->
+    <view class="card day-card" wx:for="{{plan.schedule}}" wx:key="day" wx:for-item="day">
+      <view class="day-head">第 {{day.day}} 天 · {{day.theme}}</view>
+      <view class="spot {{s.rest ? 'spot-rest' : (s.meal ? 'spot-meal' : (s.restDay ? 'spot-restday' : ''))}}" wx:for="{{day.spots}}" wx:key="name" wx:for-item="s">
+        <view class="spot-name">
+          {{s.rest ? '☕ ' : (s.meal ? '🍚 ' : (s.restDay ? '🌿 ' : ''))}}{{s.name}}
+          <text wx:if="{{!s.rest && !s.meal && !s.restDay}}" class="tag level-{{s.level === '高' ? 'high' : (s.level === '中' ? 'mid' : 'low')}}">{{s.level === '高' ? '高体力' : (s.level === '中' ? '中等体力' : '低体力')}}</text>
+          <text wx:if="{{!s.rest && !s.meal && !s.restDay}}" class="tag">{{s.type}}</text>
+        </view>
+        <view wx:if="{{!s.rest && !s.meal && !s.restDay}}" class="spot-meta">步行约 {{s.walk}} 米 · 建议 {{s.duration}} · 人流{{s.crowd}}</view>
+        <view wx:if="{{s.meal || s.restDay}}" class="spot-meta">建议 {{s.duration}}</view>
+        <view class="spot-desc">{{s.description}}</view>
+        <view wx:if="{{!s.rest && !s.meal && !s.restDay}}" class="tip">休息点：{{s.restPoint}}　附近医疗：{{s.nearbyHospital}}</view>
+        <view wx:if="{{s.tips}}" class="tip">提示：{{s.tips}}</view>
+      </view>
+    </view>
+
+    <!-- 行程风险评估 -->
+    <view class="card">
+      <view class="card-title">行程风险评估</view>
+      <view class="tip">每日步行 {{plan.risk.dailyWalk}}</view>
+      <view class="risk-item" wx:for="{{plan.risk.items}}" wx:key="*this">· {{item}}</view>
+    </view>
+
+    <!-- 老年出行贴士 -->
+    <view class="card">
+      <view class="card-title">老年出行贴士</view>
+      <view class="tip-group">
+        <view class="tip-group-title">休息建议</view>
+        <view class="risk-item" wx:for="{{plan.tips.rest}}" wx:key="*this" wx:for-item="t">· {{t}}</view>
+      </view>
+      <view class="tip-group">
+        <view class="tip-group-title">就近医疗</view>
+        <view class="risk-item" wx:for="{{plan.tips.medical}}" wx:key="*this" wx:for-item="t">· {{t}}</view>
+      </view>
+      <view class="tip-group">
+        <view class="tip-group-title">饮食忌口</view>
+        <view class="risk-item" wx:for="{{plan.tips.diet}}" wx:key="*this" wx:for-item="t">· {{t}}</view>
+      </view>
+      <view class="tip-group">
+        <view class="tip-group-title">天气与穿衣</view>
+        <view class="risk-item" wx:for="{{plan.tips.weather}}" wx:key="*this" wx:for-item="t">· {{t}}</view>
+      </view>
+      <view class="tip-group">
+        <view class="tip-group-title">随身物品</view>
+        <view class="risk-item" wx:for="{{plan.tips.carry}}" wx:key="*this" wx:for-item="t">· {{t}}</view>
+      </view>
+    </view>
+
+    <!-- 快捷调整 -->
+    <view class="card">
+      <view class="card-title">一键调整行程（无需打字）</view>
+      <view class="adjust-row">
+        <view class="adjust-btn" data-action="increase_rest" bindtap="onAdjust">增加休息</view>
+        <view class="adjust-btn" data-action="reduce_walk" bindtap="onAdjust">减少步行</view>
+        <view class="adjust-btn" data-action="change_indoor" bindtap="onAdjust">更换室内</view>
+        <view class="adjust-btn" data-action="avoid_crowd" bindtap="onAdjust">避开人流</view>
+      </view>
+    </view>
+
+    <!-- 操作 -->
+    <view class="big-btn {{saved ? 'done' : ''}}" bindtap="save">{{saved ? '✓ 已保存' : '保存方案'}}</view>
+    <view class="big-btn secondary" bindtap="copy">复制行程文本</view>
+    <view class="big-btn secondary" bindtap="shareImage">生成分享图片</view>
+    <view class="big-btn" bindtap="goChat">继续对话调整行程</view>
+
+    <view class="tip center-tip">身体情况优先 · 出行注意安全 · 慢病患者按时服药</view>
+  </block>
+
+  <!-- 分享图画布（隐藏） -->
+  <canvas type="2d" id="shareCanvas" style="width: 320px; height: 450px; position: fixed; left: -9999px; top: 0;"></canvas>
+</view>

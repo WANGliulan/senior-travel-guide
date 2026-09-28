@@ -1,0 +1,5 @@
+.page { padding-bottom: 60rpx; }
+.set-row { display: flex; justify-content: space-between; align-items: center; padding: 16rpx 0; }
+.set-label { font-size: 1em; font-weight: 700; color: #2B3440; }
+.set-label.danger { color: #B91C1C; }
+.set-value { font-size: 0.95em; color: #5DAF8C; }

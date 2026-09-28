@@ -1,0 +1,48 @@
+<view class="chat-wrap">
+  <!-- 悬浮按钮 -->
+  <view class="chat-fab" bindtap="toggleChat">
+    <text class="fab-icon">{{open?'✕':'🤖'}}</text>
+    <text class="fab-dot"></text>
+  </view>
+
+  <!-- 聊天面板 -->
+  <view class="chat-panel {{open?'open':''}}" wx:if="{{open}}">
+    <view class="chat-header">
+      <text class="chat-title">{{titleText}}</text>
+      <text class="chat-close" bindtap="toggleChat">✕</text>
+    </view>
+
+    <!-- 消息区 -->
+    <scroll-view scroll-y class="chat-messages" scroll-into-view="{{scrollInto}}">
+      <view wx:if="{{history.length===0}}" class="chat-welcome">
+        <text>{{welcomeText}}</text>
+        <view class="quick-list">
+          <view wx:for="{{quickQuestions}}" wx:key="label" class="quick-item" data-q="{{item.question}}" bindtap="sendQuickQuestion">
+            {{item.label}}
+          </view>
+        </view>
+      </view>
+      <view wx:for="{{history}}" wx:key="id" class="chat-msg {{item.role==='user'?'user':'assistant'}}">
+        <text class="msg-content">{{item.content}}</text>
+      </view>
+      <view wx:if="{{loading}}" class="chat-msg assistant">
+        <text class="msg-content">...</text>
+      </view>
+      <view id="chatBottom"></view>
+    </scroll-view>
+
+    <!-- 输入区 -->
+    <view class="chat-input-bar">
+      <input
+        class="chat-input"
+        value="{{input}}"
+        placeholder="{{placeholderText}}"
+        placeholder-class="placeholder-style"
+        bindinput="onInput"
+        confirm-type="send"
+        bindconfirm="sendMessage"
+      />
+      <button class="chat-send" bindtap="sendMessage">{{sendText}}</button>
+    </view>
+  </view>
+</view>
