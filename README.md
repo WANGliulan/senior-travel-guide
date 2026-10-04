@@ -1,4 +1,7 @@
 # 智游康行 · 岁旅相伴 — 微信小程序源码
+[![CI](https://github.com/WANGliulan/senior-travel-guide/actions/workflows/ci.yml/badge.svg)](https://github.com/WANGliulan/senior-travel-guide/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Node](https://img.shields.io/badge/Node-%E9%9B%B6%E7%AC%AC%E4%B8%89%E6%96%B9%E4%BE%9D%E8%B5%96-brightgreen.svg)](#一直接运行推荐先用这步)
 
 面向老年人的旅游规划智能体微信小程序（大模型与智能体应用赛道）。
 基于原 Web 版 Tour-AI（Next.js）按《小程序前后端设计方案》改写的可运行版本：
