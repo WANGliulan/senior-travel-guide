@@ -2,12 +2,16 @@
   <!-- 约束提示条 -->
   <view class="constraint-bar" wx:if="{{constraintText}}">{{constraintText}}</view>
 
-  <!-- 消息列表 -->
+  <!-- 消息列表（⚠️ wx:for-item="m" 必须显式声明，否则 m 恒为 undefined → 空气泡） -->
   <scroll-view scroll-y class="msg-list" scroll-into-view="{{scrollTo}}">
-    <view class="msg {{m.role === 'user' ? 'msg-user' : 'msg-ai'}}" wx:for="{{messages}}" wx:key="id" id="msg-{{m.id}}">
+    <view
+      class="msg {{m.role === 'user' ? 'msg-user' : 'msg-ai'}}"
+      wx:for="{{messages}}"
+      wx:for-item="m"
+      wx:key="id"
+      id="msg-{{m.id}}">
       <view class="msg-bubble">
-        <block wx:if="{{m.typing}}">正在思考…</block>
-        <block wx:else>{{m.content}}</block>
+        <text class="msg-text">{{m.typing ? '正在思考…' : m.content}}</text>
       </view>
     </view>
     <view id="bottom" style="height: 4rpx;"></view>

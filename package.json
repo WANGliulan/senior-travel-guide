@@ -1,0 +1,18 @@
+{
+  "name": "zhiyou-kangxing-sui-lv-xiangban",
+  "version": "1.0.0",
+  "private": true,
+  "description": "智游康行·岁旅相伴 —— 面向老年人的旅游规划智能体（微信小程序 + 后端服务）。根目录 package.json 仅用于统一启动脚本与云平台（Render/Railway/Heroku 类）识别 Node 应用。",
+  "engines": {
+    "node": ">=16"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "check": "node server/scripts/check-llm.js",
+    "selftest": "node server/scripts/selftest.js",
+    "lint:wxml": "node tools/check-wxml.js",
+    "test": "node server/scripts/selftest.js && node tools/check-wxml.js"
+  },
+  "dependencies": {},
+  "license": "MIT"
+}

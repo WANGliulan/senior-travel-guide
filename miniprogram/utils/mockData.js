@@ -104,4 +104,180 @@ function buildPlan(profile) {
   };
 }
 
-module.exports = { CITIES, buildPlan };
+// ===== 年龄段策略（本地模拟版，与后端 server/lib/agePolicy.js 行为一致）=====
+const AGE_GROUPS = [
+  { id: '6-17', label: '6—17 岁', mode: 'general', fontScale: 1.0, highContrast: false },
+  { id: '18-40', label: '18—40 岁', mode: 'general', fontScale: 1.0, highContrast: false },
+  { id: '41-60', label: '41—60 岁', mode: 'senior', fontScale: 1.25, highContrast: false },
+  { id: '61+', label: '61 岁及以上', mode: 'senior', fontScale: 1.4, highContrast: true }
+];
+
+function resolveAgeFlow(input) {
+  const raw = String(input || '');
+  let group = AGE_GROUPS.filter((g) => g.id === raw)[0];
+  if (!group) {
+    const num = parseInt(raw.replace(/[^0-9]/g, ''), 10);
+    if (!isNaN(num)) {
+      group = num <= 17 ? AGE_GROUPS[0] : (num <= 40 ? AGE_GROUPS[1] : (num <= 60 ? AGE_GROUPS[2] : AGE_GROUPS[3]));
+    }
+  }
+  if (!group) group = AGE_GROUPS[1];
+  const senior = group.mode === 'senior';
+  return {
+    ok: true,
+    ageGroup: group.id,
+    ageLabel: group.label,
+    mode: group.mode,
+    seniorFlow: senior,
+    fontScale: group.fontScale,
+    highContrast: group.highContrast,
+    requireFields: senior
+      ? [
+        { key: 'mobility', label: '行动能力', options: ['完全自理', '需慢行', '需搀扶或轮椅'] },
+        { key: 'chronic', label: '基础疾病', options: ['无', '高血压', '心脏病', '糖尿病'] },
+        { key: 'accessible', label: '无障碍需求', options: ['需要无障碍通道/电梯', '不需要'] },
+        { key: 'walkLimit', label: '每日可承受步行上限', options: ['1km以内', '1-3km', '3-5km', '5km以上'] },
+        { key: 'joints', label: '关节/膝关节状况', options: ['正常', '轻微不便', '明显不便'] }
+      ]
+      : [],
+    nextStep: senior ? 'senior_profile' : 'general_profile',
+    message: senior
+      ? '已为您开启适老化模式（大字体）并进入适老出行信息采集。系统将优先过滤高体力消耗、无无障碍配套的景点，并额外输出行程风险评估与专属出行贴士。'
+      : '已进入通用规划流程，填写出行信息即可生成行程。'
+  };
+}
+
+// ===== 离线智能回复（未连接大模型/后端时的兜底，尽量给出有依据、可执行的回答）=====
+const CITY_LIST = CITIES.reduce((acc, r) => acc.concat(r.cities || []), []);
+
+function findCityIn(text) {
+  const s = String(text || '');
+  const hits = CITY_LIST.filter((c) => s.indexOf(c) >= 0).sort((a, b) => b.length - a.length);
+  return hits[0] || '';
+}
+
+// 行动能力受限的各种说法（脑梗 / 中风 / 偏瘫 / 轮椅…）
+// ⚠️ 注意不能再用裸的 '人' 做关键词 —— "病人""老人""家人" 都会误命中"避开人流"
+const MOBILITY_KEYS = [
+  '脑梗', '脑出血', '脑血栓', '中风', '偏瘫', '半身', '瘫痪',
+  '轮椅', '搀扶', '搀着', '扶着', '拄拐', '拐杖', '助行器', '助行',
+  '行动不便', '走不动', '走不了', '腿脚', '腿不利索', '膝盖', '关节', '刚能走', '勉强走', '站不稳'
+];
+
+/** 行动能力受限的选点建议（无行程 / 只是问推荐时使用） */
+function mobilityAdvice(t) {
+  const city = findCityIn(t);
+  const lines = [
+    '按您说的行动还不太方便，选地方把握三点最要紧：',
+    '· 全程平路无台阶、有无障碍通道或电梯；',
+    '· 每个点 1 小时以内，随时能坐下歇脚；',
+    '· 离医院近、打车方便，累了能马上回住处。'
+  ];
+  if (city) {
+    const spots = poolOf(city).filter((s) => s.level !== '高').slice(0, 3);
+    if (spots.length) {
+      lines.push('');
+      lines.push('【' + city + '】相对稳妥的选择：');
+      spots.forEach((s) => lines.push('· ' + s.name + '（' + s.type + '，' + s.duration + '，' + s.restPoint + '）'));
+    }
+  }
+  lines.push('');
+  lines.push('建议点击"生成行程"填写出行信息，把"行动能力"选为"需搀扶或轮椅"、"每日步行上限"选"1km以内"，' +
+    '我会据此剔除台阶多、步行量大的景点，并额外给出行程风险评估与专属贴士。');
+  return lines.join('\n');
+}
+
+/** 本地兜底回复：意图识别 + 知识库推荐 + 引导生成行程 */
+function buildOfflineReply(text, plan) {
+  const t = String(text || '');
+  const city = findCityIn(t);
+  const hasPlan = !!plan;
+  const mobilityHit = MOBILITY_KEYS.some((k) => t.indexOf(k) >= 0);
+
+  // 1) 行动能力受限 且 当前没有行程 → 直接给"怎么选地方"的可执行建议
+  //    （有行程时优先响应"调整行程"的明确诉求，见下方各分支）
+  if (mobilityHit && !hasPlan) {
+    return { reply: mobilityAdvice(t), action: null };
+  }
+
+  // 2) 人流（关键词收紧：必须是"人流/人多/拥挤"等，不能是裸的"人"）
+  if (/人流|人多|拥挤|排队|太吵|吵|清净|避开人多/.test(t)) {
+    return hasPlan
+      ? { reply: '好的，我已避开人流密集的景点，改选清静、有座椅的地方。建议上午 9 点前或下午 4 点后错峰出门，博物馆一开馆就进去人最少。', action: 'avoid_crowd' }
+      : { reply: '想避开人流，建议挑工作日上午 9 点前或下午 4 点后出门；博物馆开馆即入最清静。\n您也可以先生成一份行程，我会直接把人多的景点筛掉。', action: null };
+  }
+
+  // 3) 休息 / 节奏
+  if (/休息|歇脚|茶歇|太累|慢一点|节奏慢|赶/.test(t)) {
+    return hasPlan
+      ? { reply: '好的，我已为您增加休息节点：每天在景点之间插入茶歇与午餐休息，单日景点适当精简。', action: 'increase_rest' }
+      : { reply: '安排行程时建议每天只放 2 个景点，上午一个、午后一个，中间留 1 小时午休。\n先生成一份行程，我可以按这个节奏帮您排。', action: null };
+  }
+
+  // 4) 步行量
+  if (/步行|走路多|走路远|少走|走得远/.test(t)) {
+    return hasPlan
+      ? { reply: '好的，我已减少步行量：优先保留低体力、步行少的景点，单日步行控制在您的上限以内。', action: 'reduce_walk' }
+      : { reply: '减少步行量的办法：优先选博物馆、公园平路，善用景区电瓶车和游船。\n生成行程时把"每日步行上限"选小一档，我会据此过滤。', action: null };
+  }
+
+  // 5) 室内 / 天气
+  if (/室内|下雨|太晒|晒|天热|高温|风大|阴天/.test(t)) {
+    return hasPlan
+      ? { reply: '好的，我已把户外强度较大的景点换成室内场馆（博物馆、展馆类），冬暖夏凉、坐着也能看。', action: 'change_indoor' }
+      : { reply: '遇到雨天或高温，博物馆、美术馆这类室内场馆最合适：有空调、有座椅、还能看展。\n需要的话我帮您把行程整体换成"室内为主"。', action: null };
+  }
+
+  // 6) 行前准备 / 贴士
+  if (/带什么|准备|要带|药品|吃药|忌口|饮食|穿衣|天气|证件|贴士|注意什么/.test(t)) {
+    return {
+      reply: '出行前按这五类准备就稳妥：\n' +
+        '① 证件：身份证、老年证（多数景区减免门票）、医保卡；\n' +
+        '② 药品：常用药按天数分装 + 病历摘要/急救卡（写明病史、用药、家人电话）；\n' +
+        '③ 穿戴：防滑鞋、薄外套或围巾（早晚温差大）、遮阳帽；\n' +
+        '④ 随身：保温杯（少量多次喝温水）、小零食（防低血糖）、拐杖或助行器；\n' +
+        '⑤ 医疗：出发前确认沿途医院药店，身体不适优先就近就医、别勉强赶行程。',
+      action: null
+    };
+  }
+
+  // 7) 提到城市 → 用知识库给推荐
+  if (city) {
+    const spots = poolOf(city).slice(0, 4);
+    if (spots.length) {
+      const list = spots.map((s) => s.name + '（' + s.type + '，' + s.duration +
+        '，步行约' + s.walk + '米，' + s.restPoint + '）');
+      return {
+        reply: '为您介绍【' + city + '】值得去的几个地方：\n· ' + list.join('\n· ') +
+          '\n\n想让我按您的天数和身体条件排成正式行程？点"生成行程"填写出行信息即可。',
+        action: null
+      };
+    }
+  }
+
+  // 8) 问候 / 自我介绍
+  if (/你好|您好|在吗|嗨|你是谁|介绍一下/.test(t)) {
+    return { reply: '您好，我是您的旅游规划助手。您可以问我"杭州有什么好玩的""带老人出门要准备什么""走不动路适合去哪"。\n想拿正式方案，点下方"生成行程"填写出行信息即可。', action: null };
+  }
+  if (/你会什么|能做什么|帮助|怎么用|有什么功能/.test(t)) {
+    return {
+      reply: '我可以帮您：\n· 推荐目的地与景点（会说明步行量、有无台阶、休息点）\n' +
+        '· 给行前准备建议（吃药、饮食、穿衣、随身物品）\n' +
+        '· 按年龄段与身体条件生成行程，并附风险评估与专属贴士\n' +
+        '· 按您的想法调整已有行程',
+      action: null
+    };
+  }
+
+  // 9) 提到行动不便但没匹配到具体调整诉求 → 给出选点建议
+  if (mobilityHit) return { reply: mobilityAdvice(t), action: null };
+
+  // 10) 默认
+  return {
+    reply: '我大概理解您的意思了。您可以再具体一点，例如：\n· "杭州有什么好玩的"\n· "我走不太动路，适合去哪"\n· "带老人出门要准备什么"\n也可以直接点下方"生成行程"，我按您的身体条件出方案。',
+    action: null
+  };
+}
+
+module.exports = { CITIES, buildPlan, AGE_GROUPS, resolveAgeFlow, buildOfflineReply };
+

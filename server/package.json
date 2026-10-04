@@ -1,0 +1,24 @@
+{
+  "name": "zhiyou-kangxing-server",
+  "version": "1.0.0",
+  "description": "智游康行·岁旅相伴 后端服务 - 规则引擎前置过滤 + 知识库检索 + 大模型生成 + 多轮会话迭代（零依赖 Node.js HTTP 服务，可公网部署）",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js",
+    "check": "node scripts/check-llm.js",
+    "selftest": "node scripts/selftest.js"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "dependencies": {},
+  "keywords": [
+    "elderly-travel",
+    "agent",
+    "llm",
+    "wechat-miniprogram"
+  ],
+  "license": "MIT"
+}

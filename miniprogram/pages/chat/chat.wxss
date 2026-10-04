@@ -4,7 +4,7 @@
   font-size: 0.85em; padding: 16rpx 24rpx;
   border-bottom: 2rpx solid #FDE68A;
 }
-.msg-list { flex: 1; padding: 20rpx 24rpx; box-sizing: border-box; }
+.msg-list { flex: 1; min-height: 0; padding: 20rpx 24rpx; box-sizing: border-box; }
 .msg { display: flex; margin-bottom: 20rpx; }
 .msg-user { justify-content: flex-end; }
 .msg-ai { justify-content: flex-start; }
@@ -12,19 +12,20 @@
   max-width: 80%;
   padding: 20rpx 26rpx;
   border-radius: 20rpx;
-  font-size: 0.95em;
-  line-height: 1.55;
   word-break: break-all;
 }
+/* 固定 px 字号 + 显式颜色，避免 em 继承链异常导致文字看不见 */
+.msg-text { font-size: 17px; line-height: 1.6; color: #2B3440; }
+.msg-user .msg-text { color: #FFFFFF; }
 .msg-user .msg-bubble { background: #5DAF8C; color: #FFFFFF; border-top-right-radius: 4rpx; }
 .msg-ai .msg-bubble { background: #FFFFFF; color: #2B3440; border-top-left-radius: 4rpx; border: 2rpx solid #E3EFE8; }
-.quick-row { display: flex; flex-wrap: wrap; gap: 12rpx; padding: 16rpx 24rpx; }
+.quick-row { display: flex; flex-wrap: wrap; gap: 12rpx; padding: 16rpx 24rpx; flex-shrink: 0; }
 .quick-chip {
   padding: 12rpx 24rpx;
   background: #E9F4EE; color: #2E6B4F;
   border-radius: 40rpx; font-size: 0.9em;
 }
-.input-bar { display: flex; align-items: center; padding: 16rpx 24rpx; background: #FFFFFF; border-top: 2rpx solid #E3EFE8; }
+.input-bar { display: flex; align-items: center; padding: 16rpx 24rpx; background: #FFFFFF; border-top: 2rpx solid #E3EFE8; flex-shrink: 0; }
 .input {
   flex: 1; height: 88rpx;
   background: #EDF5F0; border-radius: 44rpx;
@@ -36,4 +37,4 @@
   border-radius: 44rpx; font-size: 1em; font-weight: 700;
 }
 .send-btn.disabled { opacity: 0.6; }
-.center-tip { text-align: center; margin: 8rpx; }
+.center-tip { text-align: center; margin: 8rpx; flex-shrink: 0; }

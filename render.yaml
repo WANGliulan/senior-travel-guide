@@ -1,0 +1,41 @@
+# ============================================================
+# Render 一键部署蓝图（Blueprint）
+#
+# 用法：
+#   1. 把本仓库推到 GitHub
+#   2. 打开 https://dashboard.render.com/blueprints  →  New Blueprint Instance
+#   3. 选择本仓库 → Render 自动读取本文件并创建服务
+#   4. 在服务详情页 Environment 里填 LLM_API_KEY（sync:false 表示不写进仓库）
+#   5. 部署完成后得到 https://xxx.onrender.com
+#      —— 把这个地址填到 miniprogram/config.js 的 API_BASE_URL
+#   6. 到微信公众平台把它加进「request 合法域名」白名单
+#
+# 说明：
+#   · 采用 Docker 方式部署（Dockerfile 在仓库根目录，构建上下文 = 仓库根）
+#   · 若想用原生 Node 运行时，可把 env/dockerfilePath 换成：
+#       env: node
+#       buildCommand: echo "零第三方依赖，无需构建"
+#       startCommand: node server/index.js
+#   · 免费实例 15 分钟无访问会休眠，首次唤醒约 30 秒（评审前先访问 /api/health 预热）
+# ============================================================
+services:
+  - type: web
+    name: zhiyou-kangxing-server
+    env: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    region: singapore          # 国内访问相对较快；也可改 oregon / frankfurt
+    healthCheckPath: /api/health
+    autoDeploy: true           # 推送到 GitHub 后自动重新部署
+    envVars:
+      - key: LLM_PROVIDER      # 火山方舟（豆包）
+        value: ark
+      - key: LLM_API_KEY       # ★ 在 Render 控制台填写，不进仓库
+        sync: false
+      - key: LLM_MODEL
+        value: doubao-seed-evolving
+      - key: LLM_THINKING      # 关闭思维链：约 100s → 约 5s
+        value: disabled
+      - key: CORS_ORIGIN
+        value: "*"

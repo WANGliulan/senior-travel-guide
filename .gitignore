@@ -12,3 +12,8 @@ $RECYCLE.BIN/
 
 # Node.js
 node_modules/
+
+# 后端服务：密钥与运行期数据不入库
+server/.env
+server/data/
+server/*.log

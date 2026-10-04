@@ -2,16 +2,69 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+}
+/* 可滚动主体：flex:1 + min-height:0 —— 保证它既能占满剩余高度，也能被正确压缩后内部滚动。
+   （不加 min-height:0 时，flex 项默认 min-height:auto，会被内容撑开并把下方输入区挤出屏幕） */
+.scroll-body {
+  flex: 1;
+  min-height: 0;
+  box-sizing: border-box;
+  padding-bottom: 12rpx;
 }
 .hero {
   background: #E9F4EE;
-  padding: 40rpx 44rpx 32rpx;
+  padding: 28rpx 44rpx 22rpx;
   color: #2E6B4F;
 }
 .hero-title { font-size: 1.4em; font-weight: 800; }
 .hero-sub { margin-top: 8rpx; font-size: 0.82em; color: #7C8B83; }
 
-.section-title { font-size: 1em; font-weight: 700; color: #2E6B4F; margin: 22rpx 32rpx 10rpx; }
+.section-title { font-size: 1em; font-weight: 700; color: #2E6B4F; margin: 16rpx 32rpx 8rpx; }
+
+/* 智能助手回复来源标识（大模型在线 / 规则兜底）—— 可点击查看说明 */
+.ai-badge {
+  margin-left: 12rpx;
+  padding: 3rpx 14rpx;
+  border-radius: 20rpx;
+  background: #E9F4EE;
+  color: #2E6B4F;
+  font-size: 0.7em;
+  font-weight: 500;
+}
+.ai-badge:active { background: #CFE0D4; }
+
+/* 年龄段选择（规划流程起始） */
+.age-board {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 24rpx;
+  gap: 12rpx;
+}
+.age-card {
+  width: calc(50% - 6rpx);
+  box-sizing: border-box;
+  background: #FFFFFF;
+  border: 3rpx solid #E3EFE8;
+  border-radius: 18rpx;
+  padding: 18rpx 20rpx;
+}
+.age-card:active { background: #E9F4EE; }
+.age-card-active { border-color: #5DAF8C; background: #E9F4EE; }
+.age-card-senior .age-label { color: #1F6E4C; }
+.age-card-senior { background: #F2FAF5; }
+.age-label { font-size: 1.05em; font-weight: 800; color: #2E6B4F; }
+.age-desc { font-size: 0.76em; color: #7C8B83; margin-top: 4rpx; }
+.age-note {
+  margin: 12rpx 24rpx 0;
+  padding: 14rpx 18rpx;
+  background: #FFF7E8;
+  border-left: 6rpx solid #E8B455;
+  border-radius: 10rpx;
+  font-size: 0.8em;
+  color: #7A5A16;
+  line-height: 1.5;
+}
 
 /* 快捷服务模块（简约） */
 .service-board {
@@ -31,19 +84,19 @@
 .service-label { font-size: 1.05em; font-weight: 800; color: #2E6B4F; }
 .service-desc { font-size: 0.78em; color: #7C8B83; margin-top: 6rpx; }
 
-/* 对话区 */
-.chat-area { flex: 1; padding: 0 24rpx 12rpx; box-sizing: border-box; }
-.msg { display: flex; margin-bottom: 20rpx; }
+/* 对话区（消息直接排在 .scroll-body 里，不再单独做内层滚动） */
+.msg { display: flex; margin-bottom: 20rpx; padding: 0 24rpx; box-sizing: border-box; }
 .msg-user { justify-content: flex-end; }
 .msg-ai { justify-content: flex-start; }
 .msg-bubble {
   max-width: 82%;
   padding: 20rpx 26rpx;
   border-radius: 20rpx;
-  font-size: 0.95em;
-  line-height: 1.55;
   word-break: break-all;
 }
+/* 用固定 px 字号与显式颜色，避免 em 继承链异常导致文字"看不见" */
+.msg-text { font-size: 17px; line-height: 1.6; color: #2B3440; }
+.msg-user .msg-text { color: #FFFFFF; }
 .msg-user .msg-bubble { background: #5DAF8C; color: #FFFFFF; border-top-right-radius: 4rpx; }
 .msg-ai .msg-bubble { background: #FFFFFF; color: #2B3440; border-top-left-radius: 4rpx; border: 2rpx solid #E3EFE8; }
 .msg-actions { margin-top: 14rpx; }
@@ -64,6 +117,7 @@
   flex-wrap: wrap;
   gap: 12rpx;
   padding: 8rpx 24rpx 12rpx;
+  flex-shrink: 0; /* 固定高度：不被上方内容挤压 */
 }
 .quick-chip {
   padding: 12rpx 24rpx;
@@ -73,13 +127,14 @@
   font-size: 0.9em;
 }
 
-/* 输入区 */
+/* 输入区（钉在底部，不参与挤压） */
 .input-bar {
   display: flex;
   align-items: center;
   padding: 14rpx 24rpx 24rpx;
   background: #FFFFFF;
   border-top: 2rpx solid #E3EFE8;
+  flex-shrink: 0;
 }
 .input {
   flex: 1;

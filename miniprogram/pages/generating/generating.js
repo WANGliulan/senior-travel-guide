@@ -33,13 +33,20 @@ Page({
       return;
     }
     this._markStep(0);
-    api.call('itinerary', { profile })
+    // 显式带上年龄段，后端据此分流「通用流程 / 适老化专项流程」
+    api.call('itinerary', { ageGroup: profile.ageGroup, profile: profile, crowdPref: profile.crowdPref === true })
       .then((res) => {
         this._markStep(1);
         this._markStep(2);
         this._markStep(3);
         this._markStep(4);
         const plan = res.plan;
+        // 记录本次生成方式（大模型 / 规则兜底），便于行程页展示
+        plan.meta = Object.assign({}, plan.meta, {
+          llmUsed: !!res.llmUsed,
+          llmReason: res.aiReason || '',
+          filteredCount: (res.filtered && res.filtered.removedCount) || 0
+        });
         getApp().globalData.currentPlan = plan;
         setTimeout(() => {
           wx.redirectTo({ url: '/pages/itinerary/itinerary?from=generate' });

@@ -1,0 +1,34 @@
+name: CI
+
+# 推送到 GitHub / 提 PR 时自动跑：后端业务自检 + 前端 WXML 循环变量检查
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: 自检（后端 63 项断言 + WXML 检查）
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 准备 Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      # 本项目零第三方依赖，无需 npm install
+      - name: 后端业务自检
+        run: node server/scripts/selftest.js
+
+      - name: 前端 WXML 循环变量检查
+        run: node tools/check-wxml.js
+
+      - name: 语法检查（所有 Node 文件）
+        run: |
+          find server tools -name '*.js' -print0 | xargs -0 -n1 node --check
+          find miniprogram -name '*.js' -print0 | xargs -0 -n1 node --check

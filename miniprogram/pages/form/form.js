@@ -1,9 +1,13 @@
-// pages/form/form.js - 老年出行信息表单（全单选/下拉/开关，减少手动打字）
+// pages/form/form.js - 出行信息表单（全单选/下拉/开关，减少手动打字）
+// 说明：表单内容随年龄段自动分流 —— 41 岁以上进入适老化专项流程，展示并采集身体约束项。
 const api = require('../../utils/api');
 const store = require('../../utils/store');
 
 Page({
   data: {
+    ageGroup: '',
+    ageLabel: '',
+    seniorFlow: false,
     city: '',
     allCities: [],
     days: 3,
@@ -32,6 +36,14 @@ Page({
 
   onLoad(options) {
     this.applySettings();
+    // 年龄段：优先取页面参数，其次取首页选择结果
+    const ageGroup = options.age ? decodeURIComponent(options.age) : store.get(store.KEY_AGE_GROUP, '');
+    const ageLabels = { '6-17': '6—17 岁', '18-40': '18—40 岁', '41-60': '41—60 岁', '61+': '61 岁及以上' };
+    this.setData({
+      ageGroup: ageGroup,
+      ageLabel: ageLabels[ageGroup] || '未选择',
+      seniorFlow: ageGroup === '41-60' || ageGroup === '61+'
+    });
     const fromProfile = options.from === 'profile';
     const last = store.get(store.KEY_PROFILE, null);
     if (fromProfile && last) {
@@ -129,6 +141,7 @@ Page({
       return;
     }
     const profile = {
+      ageGroup: d.ageGroup || '18-40',
       city: d.city,
       days: d.days,
       budget: d.budget,

@@ -1,9 +1,28 @@
 <view class="page {{highContrast ? 'high-contrast' : ''}}" style="font-size: {{fontScale}}px;">
+  <!-- 可滚动主体：上方信息与对话消息放在同一个滚动容器里。
+       新消息到达时自动滚到底部、上方内容自然滚出屏幕，
+       这样对话区不会被上方内容挤成空白（此前 100vh 固定列 + flex:1 会被压缩到接近 0）。 -->
+  <scroll-view scroll-y class="scroll-body" scroll-into-view="{{scrollTo}}" scroll-with-animation>
   <!-- 顶部标题 -->
   <view class="hero">
     <view class="hero-title">智游康行 · 岁旅相伴</view>
-    <view class="hero-sub">适老出行智能助手 · 自由对话 · 定制慢节奏行程</view>
+    <view class="hero-sub">全年龄段旅游规划 · 老年友好为核心 · 定制慢节奏行程</view>
   </view>
+
+  <!-- 第一步：选择年龄段（规划流程起始） -->
+  <view class="section-title">第一步：选择出行年龄段</view>
+  <view class="age-board">
+    <view
+      class="age-card {{ageGroup === item.id ? 'age-card-active' : ''}} {{item.id === '41-60' || item.id === '61+' ? 'age-card-senior' : ''}}"
+      wx:for="{{ageGroups}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="onPickAge">
+      <view class="age-label">{{item.label}}</view>
+      <view class="age-desc">{{item.desc}}</view>
+    </view>
+  </view>
+  <view class="age-note" wx:if="{{ageNotice}}">{{ageNotice}}</view>
 
   <!-- 快捷服务模块 -->
   <view class="section-title">快捷服务</view>
@@ -14,21 +33,28 @@
     </view>
   </view>
 
-  <!-- 智能体对话区 -->
-  <view class="section-title">智能助手</view>
-  <scroll-view scroll-y class="chat-area" scroll-into-view="{{scrollTo}}">
-    <view class="msg {{m.role === 'user' ? 'msg-user' : 'msg-ai'}}" wx:for="{{messages}}" wx:key="id" id="msg-{{m.id}}">
-      <view class="msg-bubble">
-        <block wx:if="{{m.typing}}">正在思考…</block>
-        <block wx:else>
-          <text user-select>{{m.content}}</text>
-          <view class="msg-actions" wx:if="{{m.actions.length > 0}}">
-            <view class="msg-action" wx:for="{{m.actions}}" wx:key="label" data-city="{{item.city}}" bindtap="onMsgAction">{{item.label}}</view>
-          </view>
-        </block>
+  <!-- 智能体对话区（大模型聊天入口） -->
+  <view class="section-title">智能助手<text class="ai-badge" wx:if="{{aiBadge}}" bindtap="onTapBadge">{{aiBadge}}</text></view>
+  <!-- ⚠️ wx:for 默认循环变量名是 item；这里用的是 m，必须显式 wx:for-item="m" 声明，
+       否则 m 恒为 undefined，会导致消息内容、typing 状态、id 全部取不到（表现为空气泡） -->
+  <view
+    class="msg {{m.role === 'user' ? 'msg-user' : 'msg-ai'}}"
+    wx:for="{{messages}}"
+    wx:for-item="m"
+    wx:for-index="mi"
+    wx:key="id"
+    id="msg-{{m.id}}">
+    <view class="msg-bubble">
+      <text class="msg-text" user-select="true">{{m.typing ? '正在思考…' : m.content}}</text>
+      <view class="msg-actions" wx:if="{{!m.typing && m.actions.length > 0}}">
+        <view class="msg-action" wx:for="{{m.actions}}" wx:key="label" data-city="{{item.city}}" bindtap="onMsgAction">{{item.label}}</view>
       </view>
     </view>
-    <view id="bottom" style="height: 4rpx;"></view>
+  </view>
+  <view wx:if="{{messages.length === 0}}" class="msg msg-ai">
+    <view class="msg-bubble"><text class="msg-text">正在准备智能助手…</text></view>
+  </view>
+  <view id="bottom" style="height: 24rpx;"></view>
   </scroll-view>
 
   <!-- 快捷指令条 -->

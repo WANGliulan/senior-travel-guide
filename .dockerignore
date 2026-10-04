@@ -1,0 +1,9 @@
+# 构建缓存与本地文件
+node_modules
+.git
+.gitignore
+tripstar-miniprogram
+*.zip
+server/.env
+server/data
+*.log
